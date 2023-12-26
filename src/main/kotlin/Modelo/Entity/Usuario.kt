@@ -1,5 +1,6 @@
 package Modelo.Entity
 
+import java.text.SimpleDateFormat
 import java.util.*
 
 class Usuario (
@@ -10,6 +11,18 @@ class Usuario (
     val usuarioBetado: Boolean
 ){
     override fun toString(): String {
-        return "Usuario[id=$id, nombre=$nombre, nacimiento=$fechaNacimiento, sueldo=$sueldo, betado=$usuarioBetado]"
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val formattedDate = dateFormat.format(fechaNacimiento)
+
+        return """
+            |************************************************
+            |Usuario {
+            |   ID: $id,
+            |   Nombre: $nombre,
+            |   Fecha de Nacimiento: $formattedDate,
+            |   Sueldo: $sueldo,
+            |   ¿Betado?: $usuarioBetado
+            |}
+        """.trimMargin()
     }
 }

@@ -40,16 +40,16 @@ open class GenericDAO<T, ID>(private val persistentClass: Class<T>) : IGenericDA
     override fun create(t: T) {
         verificarArchivo()
         val allItems = getAll().toMutableList()
-        if (esUnico(getObjectoID(t), allItems)) {
+        if (esValido(getObjectoID(t), allItems)) {
             allItems.add(t)
             saveAll(allItems)
         } else {
-            println("El ID ya existe. No se puede crear el objeto.")
+            println("El ID ya existe o ingresaste datos INVALIDOS. No se puede crear.")
         }
     }
 
-    private fun esUnico(id: ID, allItems: List<T>): Boolean {
-        val idExiste = allItems.any { getObjectoID(it) == id }
+    private fun esValido(id: ID, allItems: List<T>): Boolean {
+        val idExiste = allItems.any { getObjectoID(it) == id || id == 0}
         return !idExiste
     }
 
@@ -72,7 +72,7 @@ open class GenericDAO<T, ID>(private val persistentClass: Class<T>) : IGenericDA
     }
 
 
-    private fun getObjectoID(objeto: T): ID {
+    fun getObjectoID(objeto: T): ID {
         val idField = persistentClass.declaredFields.find { it.name == "id" }
         idField?.let {
             it.isAccessible = true
